@@ -1,0 +1,22 @@
+# Core ML/AI
+torch>=2.1.0
+transformers>=4.36.0
+sentence-transformers>=2.3.0
+
+# Vector Store
+faiss-cpu>=1.7.4
+
+# Data
+numpy>=1.24.0
+pandas>=2.0.0
+
+# Demo UI
+streamlit>=1.29.0
+
+# Utilities
+tqdm>=4.65.0
+rich>=13.0.0
+python-dotenv>=1.0.0
+
+# Testing
+pytest>=7.4.0
