@@ -1,0 +1,9 @@
+{
+    "servers": {
+        "azure-ai-search": {
+            "type": "http",
+            "url": "https://mcp-search-app.politesky-cce0791d.swedencentral.azurecontainerapps.io/mcp",
+            "headers": { "Content-Type": "application/json" }
+        }
+    }
+}
