@@ -1,14 +1,15 @@
-"""Script to run the full retrieval pipeline demo.
+"""Script to run the Microsoft Quantum Research retrieval pipeline demo.
 
 Usage:
     python scripts/run_retrieval_demo.py
 
-This script demonstrates the end-to-end retrieval pipeline:
-1. Load sample documents
+This script demonstrates the end-to-end retrieval pipeline over the
+Microsoft Quantum research paper corpus:
+1. Load document excerpts from the quantum paper corpus
 2. Chunk documents
 3. Encode chunks into embeddings
 4. Index in FAISS
-5. Run queries and display results
+5. Run quantum-research queries and display results
 
 Requires: sentence-transformers, faiss-cpu
 """
@@ -30,7 +31,7 @@ console = Console()
 
 
 def main():
-    console.print(Panel("[bold blue]AI Research Demo: Embedding Retrieval Pipeline[/]", expand=False))
+    console.print(Panel("[bold blue]Microsoft Quantum Research Explorer: Retrieval Pipeline[/]", expand=False))
 
     # Step 1: Initialize pipeline
     console.print("\n[bold]Step 1:[/] Initializing retrieval pipeline...")
@@ -41,11 +42,13 @@ def main():
     num_chunks = pipeline.index_documents(SAMPLE_DOCUMENTS)
     console.print(f"  ✓ Indexed {num_chunks} chunks from {len(SAMPLE_DOCUMENTS)} documents")
 
-    # Step 3: Run queries
+    # Step 3: Run queries relevant to the Microsoft Quantum research corpus
     queries = [
-        "How does REFRAG modify the decoding process?",
-        "What are the advantages of dense retrieval over BM25?",
-        "Explain document chunking strategies",
+        "How does quantum phase estimation extract molecular ground state energies?",
+        "What is a tetron qubit and how does topological protection work?",
+        "How is fermion parity of Majorana zero modes measured interferometrically?",
+        "What quantum error correction codes are used in fault-tolerant topological qubit arrays?",
+        "How does active space selection reduce the qubit count in QDK/Chemistry?",
     ]
 
     console.print("\n[bold]Step 3:[/] Running queries...\n")

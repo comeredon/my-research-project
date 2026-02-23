@@ -1,6 +1,7 @@
-# 🔬 AI Research Demo: Embedding Retrieval & REFRAG
+# ⚛️ Microsoft Quantum Research Explorer
 
-> A hands-on demo project showcasing **Embedding-based Retrieval** and **REFRAG (Rethinking RAG-based Decoding)** — built to demonstrate GitHub Copilot, Copilot Agents, Skills, and Codespaces.
+> A semantic-retrieval demo over **Microsoft Quantum** research papers — built to
+> demonstrate GitHub Copilot, Copilot Agents, Azure AI Search, and Codespaces.
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/comeredon/my-research-project)
 
@@ -8,19 +9,29 @@
 
 ## 📖 Overview
 
-This project implements the core concepts from two research papers:
+This project implements a RAG-style retrieval pipeline that lets you explore a
+corpus of **Microsoft Quantum** research papers using dense vector search.  The
+back-end search index is powered by **Azure AI Search**, and the local demo runs
+word-overlap search so it works anywhere without GPU or cloud credentials.
 
-1. **Embedding-based Retrieval** — Encoding documents into dense vector representations for semantic search using sentence-transformers and FAISS.
-2. **REFRAG** ([Lin et al., 2025](https://arxiv.org/abs/2509.01092)) — A novel approach to RAG that modifies token-level probability distributions during LLM decoding, rather than prepending retrieved documents to the prompt.
+### Indexed Research Papers
 
-### Key Concepts
-
-| Concept | Standard RAG | REFRAG |
+| Paper | Topic | Organisation |
 |---|---|---|
-| Retrieved docs | Prepended to prompt | Used during decoding |
-| Integration level | Prompt-level | Token-level |
-| Context window | Consumed by docs | Preserved for generation |
-| Control | All-or-nothing | Fine-grained (λ weight) |
+| *QDK/Chemistry: A Modular Toolkit for Quantum Chemistry Applications* | Quantum Chemistry | Microsoft Quantum |
+| *Interferometric Single-Shot Parity Measurement in InAs-Al Hybrid Devices* | Majorana / Topological Qubits | Microsoft Azure Quantum |
+| *Roadmap to Fault-Tolerant Quantum Computation Using Topological Qubit Arrays* | Fault-Tolerant QC / Tetrons | Microsoft Quantum |
+| *Optimizing the Pairwise Measurement-Based Surface Code* | Quantum Error Correction | Microsoft Quantum |
+
+### Key Research Topics
+
+| Topic | Description |
+|---|---|
+| **Tetron Qubits** | Majorana-based qubits formed from two topological wires; errors suppressed exponentially by topological protection |
+| **QDK/Chemistry** | End-to-end pipeline from molecular structure → SCF → active space → QPE on fault-tolerant hardware |
+| **Parity Measurement** | Interferometric single-shot readout of Majorana fermion parity via quantum capacitance shifts in InAs-Al devices |
+| **Floquet Codes** | Hastings-Haah codes tailored to measurement-based tetron architecture; basis for lattice surgery |
+| **Surface Code Decoding** | PyMatching v2 / sparse blossom minimum-weight perfect matching over spacetime detector graphs |
 
 ---
 
@@ -54,11 +65,11 @@ my-research-project/
 │   ├── retrieval/          # Retrieval pipeline
 │   │   ├── chunker.py      # Text chunking with overlap
 │   │   └── pipeline.py     # End-to-end retrieval orchestration
-│   ├── refrag/             # REFRAG decoding
+│   ├── refrag/             # RAG decoding module (legacy)
 │   │   └── decoder.py      # Token-level distribution blending
 │   └── demo/               # Streamlit demo app
 │       ├── app.py          # Interactive web demo
-│       └── sample_data.py  # Sample documents
+│       └── sample_data.py  # Quantum research paper excerpts
 ├── scripts/
 │   └── run_retrieval_demo.py  # CLI demo script
 ├── tests/
@@ -70,76 +81,59 @@ my-research-project/
 
 ---
 
-## 🎯 Demo Guide: Showcasing GitHub Copilot Features
+## 🎯 Demo Guide: Showcasing GitHub Copilot + Azure AI Search
 
-This project is designed as a **live demo** for presenting GitHub Copilot capabilities. Below is a structured walkthrough.
+This project is designed as a **live demo** for presenting GitHub Copilot capabilities
+with a real Azure AI Search back-end over Microsoft Quantum research papers.
 
 ### Demo 1: GitHub Copilot Code Completion
 
-**Goal**: Show how Copilot accelerates writing research code.
+**Goal**: Show how Copilot accelerates writing research retrieval code.
 
 1. Open `src/embeddings/encoder.py`
 2. Start typing a new method:
    ```python
    def encode_batch_with_progress(self, texts, desc="Encoding"):
    ```
-3. Watch Copilot suggest the full implementation
-4. Show how it understands the context (uses `self.model`, `self.config.batch_size`, etc.)
+3. Watch Copilot suggest the full implementation using the existing context
 
-### Demo 2: GitHub Copilot Chat
+### Demo 2: GitHub Copilot Chat — Research Paper Q&A
 
-**Goal**: Show Copilot Chat for code understanding and generation.
+**Goal**: Show Copilot Chat for understanding quantum computing concepts in code.
 
-1. Select the `RefragDecoder.generate()` method in `src/refrag/decoder.py`
-2. Ask Copilot Chat: *"Explain how this REFRAG decoding works step by step"*
-3. Ask: *"Add error handling for when the retrieval pipeline returns no results"*
-4. Ask: *"Write a unit test for this method"*
+1. Select the `RetrievalPipeline.query()` method in `src/retrieval/pipeline.py`
+2. Ask Copilot Chat: *"How would I extend this to connect to Azure AI Search instead of FAISS?"*
+3. Ask: *"What query would I write to find information about Majorana zero modes?"*
+4. Ask: *"Write a unit test for this method using the quantum research sample data"*
 
-### Demo 3: GitHub Copilot Agents (Workspace Agent)
+### Demo 3: GitHub Copilot Agents
 
 **Goal**: Show `@workspace` agent for project-wide understanding.
 
-1. In Copilot Chat, type: `@workspace How does the retrieval pipeline connect to the REFRAG decoder?`
+1. In Copilot Chat, type: `@workspace How does the retrieval pipeline process a query about tetron qubits?`
 2. Show how it understands cross-file dependencies
-3. Ask: `@workspace What changes would I need to support GPU acceleration?`
-4. Ask: `@workspace Generate a diagram of the data flow in this project`
+3. Ask: `@workspace What changes would I need to add Azure AI Search as a retrieval backend?`
 
-### Demo 4: GitHub Copilot Custom Skills / Instructions
+### Demo 4: Copilot Custom Instructions
 
-**Goal**: Show how `.github/copilot-instructions.md` guides Copilot.
+**Goal**: Show how `.github/copilot-instructions.md` guides Copilot for this domain.
 
 1. Open `.github/copilot-instructions.md` and explain its purpose
-2. Show that Copilot suggestions follow the project conventions (type hints, dataclasses, logging)
-3. Create a new file and show Copilot following the documented architecture
+2. Show that Copilot suggestions follow conventions (type hints, dataclasses, logging)
 
 ### Demo 5: GitHub Codespaces
 
 **Goal**: Show the full cloud development experience.
 
 1. Show `.devcontainer/devcontainer.json` configuration
-2. Highlight: pre-installed extensions (Copilot, Python, Jupyter)
-3. Highlight: automatic dependency installation (`postCreateCommand`)
-4. Highlight: port forwarding for Streamlit (port 8501)
-5. Run the Streamlit demo and show it works immediately
+2. Highlight: pre-installed extensions, automatic dependency install, port forwarding for Streamlit (8501)
+3. Run the Streamlit demo and show it works immediately
 
 ### Demo 6: Copilot for Testing
 
-**Goal**: Show Copilot generating tests.
-
 1. Open `tests/test_chunker.py`
-2. Ask Copilot to generate additional edge case tests
-3. Run tests: `pytest tests/ -v`
-4. Show Copilot fixing any failing tests
-
-### Demo 7: Copilot Workflow (Code Review & PR)
-
-**Goal**: Show Copilot in the PR workflow.
-
-1. Create a branch: `git checkout -b feature/hybrid-retrieval`
-2. Use Copilot to implement a hybrid retrieval method (BM25 + dense)
-3. Commit and push
-4. Create a PR — show Copilot PR description generation
-5. Show Copilot code review suggestions
+2. Ask Copilot to generate edge case tests for quantum paper excerpts
+3. Run: `pytest tests/ -v`
 
 ---
 
@@ -151,27 +145,12 @@ pytest tests/ -v
 
 ---
 
-## 🔧 Development
-
-### Adding New Retrieval Methods
-
-1. Create a new file in `src/retrieval/`
-2. Implement the retrieval interface (see `pipeline.py` for the pattern)
-3. Add tests in `tests/`
-4. Use Copilot to help with implementation!
-
-### Extending the REFRAG Decoder
-
-The decoder in `src/refrag/decoder.py` can be extended with:
-- Different interpolation strategies (learned λ, attention-based weighting)
-- Caching of retrieval results across decoding steps
-- Beam search with REFRAG blending
-
----
-
 ## 📚 References
 
-- **REFRAG**: Lin, X., Ghosh, A., Low, B.K.H., Shrivastava, A., & Mohan, V. (2025). *REFRAG: Rethinking RAG based Decoding*. [arXiv:2509.01092](https://arxiv.org/abs/2509.01092)
+- **QDK/Chemistry**: Microsoft Quantum (2025). *QDK/Chemistry: A Modular Toolkit for Quantum Chemistry Applications.*
+- **Interferometric Parity**: Microsoft Azure Quantum (2023). *Interferometric Single-Shot Parity Measurement in InAs-Al Hybrid Devices.*
+- **Topological Roadmap**: Microsoft Quantum (2025). *Roadmap to Fault-Tolerant Quantum Computation Using Topological Qubit Arrays.*
+- **Surface Code Optimization**: Microsoft Quantum (2024). *Optimizing the Pairwise Measurement-Based Surface Code.*
 - **Sentence-Transformers**: Reimers, N. & Gurevych, I. (2019). *Sentence-BERT*. [arXiv:1908.10084](https://arxiv.org/abs/1908.10084)
 - **FAISS**: Johnson, J., Douze, M., & Jégou, H. (2019). *Billion-scale similarity search with GPUs*. [arXiv:1702.08734](https://arxiv.org/abs/1702.08734)
 
